@@ -1,0 +1,63 @@
+﻿@model IEnumerable<PagedList.Models.Album>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>List of albums</h1>
+<div id="test-list">
+    <ul class="list list-group">
+    @foreach (var item in Model)
+    {
+        <li class="list-item row mb-3 name">
+            
+            
+            <div class="col-8">
+                TITLE: @Html.DisplayFor(modelItem => item.Title)
+            </div>
+            <div class="col-4">
+                <img src="@Html.DisplayFor(modelItem => item.ThumbnailUrl)" class="img-fluid rounded" alt="...">
+            </div>
+        </li>
+    }
+</ul>
+<div class="row d-flex justify-content-center">
+        <div class="col-9">
+            Items per page: <input type="number" id="imp-length" value="5"/>
+            <span class="text-danger" id="numVal"></span>
+        </div>
+        <nav area-label="Pagination" class="d-flex col-3 justify-content-end">
+            Page 
+            <ul class="pagination">
+            </ul>
+        </nav>
+</div>
+
+</div>
+
+@section Scripts{
+    <script>
+        var albumList = new List('test-list', {
+            valueNames: ['name'],
+            page: 5,
+            pagination: true,
+            paginationClass: 'page-link'
+        });
+        $(document).ready(function(){
+
+
+            $('#imp-length').change(function(){
+                let valor = $(this).val();
+
+                albumList.page = valor;
+                $('#numVal').text("");
+                if(valor <= 0){
+                    $('#numVal').text("The number cannot be zero or negative.");
+                    return false;
+                }
+
+                albumList.update();
+            });
+        });
+    </script>
+}
